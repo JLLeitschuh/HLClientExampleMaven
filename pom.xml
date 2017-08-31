@@ -15,8 +15,8 @@
     </licenses>
 
     <properties>
-        <elasticsearch.version>6.0.0-beta1</elasticsearch.version>
-        <elasticsearch.client.version>6.0.0-beta1</elasticsearch.client.version>
+        <elasticsearch.version>5.6.0-SNAPSHOT</elasticsearch.version>
+        <elasticsearch.client.version>5.6.0-SNAPSHOT</elasticsearch.client.version>
         <log4j.version>2.8.2</log4j.version>
         <java.compiler.version>1.8</java.compiler.version>
     </properties>
@@ -31,6 +31,18 @@
             </releases>
             <snapshots>
                 <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <!-- the following are only needed for unrelease snapshot version -->
+        <repository>
+            <id>elastic-snapshots</id>
+            <name>Elastic Snapshots</name>
+            <url>https://snapshots.elastic.co/maven/</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
             </snapshots>
         </repository>
         <repository>

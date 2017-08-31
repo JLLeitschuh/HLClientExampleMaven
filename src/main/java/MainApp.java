@@ -1,5 +1,6 @@
 import java.io.IOException;
 
+import org.apache.http.HttpHost;
 import org.elasticsearch.action.DocWriteResponse.Result;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
@@ -9,7 +10,6 @@ import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.ResponseException;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestHighLevelClient;
-import org.elasticsearch.client.http.HttpHost;
 import org.elasticsearch.common.Strings;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
@@ -25,8 +25,9 @@ public class MainApp {
             try {
                 restClient.performRequest("PUT", "/test");
             } catch (ResponseException e) {
-                if (e.getResponse().getStatusLine().getStatusCode() == 400 &&
-                        (e.getMessage().contains("resource_already_exists_exception"))) {
+                if (e.getResponse().getStatusLine().getStatusCode() == 400
+                        && (e.getMessage().contains("resource_already_exists_exception")
+                                || e.getMessage().contains("index_already_exists_exception"))) {
                     System.out.println("index already exists. Ignoring error...");
                 } else {
                     throw e;
