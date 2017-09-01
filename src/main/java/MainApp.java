@@ -1,5 +1,6 @@
 import java.io.IOException;
 
+import org.apache.http.HttpHost;
 import org.elasticsearch.action.DocWriteResponse.Result;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
@@ -8,8 +9,8 @@ import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.ResponseException;
 import org.elasticsearch.client.RestClient;
+import org.elasticsearch.client.RestClientBuilder;
 import org.elasticsearch.client.RestHighLevelClient;
-import org.elasticsearch.client.http.HttpHost;
 import org.elasticsearch.common.Strings;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
@@ -17,13 +18,13 @@ import org.elasticsearch.search.builder.SearchSourceBuilder;
 public class MainApp {
 
     public static void main(String[] args) throws IOException {
-        try (RestClient restClient = RestClient.builder(new HttpHost("localhost", 9200, "http")).build()) {
-            RestHighLevelClient hlClient = new RestHighLevelClient(restClient);
+        RestClientBuilder restClientBuilder = RestClient.builder(new HttpHost("localhost", 9200, "http"));
+        try (RestHighLevelClient hlClient = new RestHighLevelClient(restClientBuilder)) {
             MainResponse info = hlClient.info();
             System.out.println(Strings.toString(info));
 
             try {
-                restClient.performRequest("PUT", "/test");
+                hlClient.getLowLevelClient().performRequest("PUT", "/test");
             } catch (ResponseException e) {
                 if (e.getResponse().getStatusLine().getStatusCode() == 400 &&
                         (e.getMessage().contains("resource_already_exists_exception"))) {
